@@ -219,6 +219,15 @@ def break_code(public_key, message):
     return pt_message_hack
 
 
+def break_key(public_key):
+    p = factorize(public_key[0])
+    q = public_key[0]//p
+
+    private_key = (public_key[0], Find_Private_Key_d(public_key[1], p, q))
+    
+    return private_key
+
+
 def FME(b, n, m):
     result = 1
 

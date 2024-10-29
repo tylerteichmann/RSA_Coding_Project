@@ -71,9 +71,10 @@ def scrape_data(html):
         ct_message = scrape_ct_message(message_string)
 
         # For time purposes, only decode messages with n less than 20 digits
-        if public_key[0] <= 10000000000000000000:
-            pt_message = rsa.break_code(public_key, ct_message)
-            response.string = pt_message
+        # if public_key[0] <= 10000000000000000000:
+        private_key = rsa.break_key(public_key)
+        pt_message = rsa.Decode(private_key, ct_message)
+        response.string = pt_message
 
         # These are all the replies to the main threads
         replies = post.select(
@@ -101,7 +102,7 @@ def scrape_data(html):
                 continue
 
             # Decode the messages using the public key from that thread
-            pt_reply = rsa.break_code(public_key, ct_reply_message)
+            pt_reply = rsa.Decode(private_key, ct_reply_message)
             reply.string = pt_reply
 
 
