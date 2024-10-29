@@ -210,6 +210,11 @@ def Decode(private_key, cipher_text):
 
 def break_code(public_key, message):
     p = factorize(public_key[0])
+
+    if p < 0:
+        print(f"Error decoding public key ({public_key}), no factors found")
+        return str(message)
+
     q = public_key[0]//p
 
     private_key = (public_key[0], Find_Private_Key_d(public_key[1], p, q))
@@ -294,7 +299,8 @@ def Convert_Num(_list):
         try:
             _string += chr(i)
         except ValueError:
-            return "Integers are not in range of char values"
+            print(f"Error converting {i} to char")
+            _string += str(i)
     return _string
 
 
