@@ -29,8 +29,10 @@ def download_data(url):
             key, value = line.split("=")
             Cookies.append({"name":key, "value":value})
 
+    options = webdriver.ChromeOptions()
+    options.add_argument('--headless')
     # Start the web browser, load the cookies, the download the required page
-    browser = webdriver.Chrome()
+    browser = webdriver.Chrome(options=options)
 
     browser.get(homepage)
 
@@ -41,6 +43,6 @@ def download_data(url):
     html = browser.page_source
 
     # Close browser
-    browser.close()
+    browser.quit()
 
     return html
