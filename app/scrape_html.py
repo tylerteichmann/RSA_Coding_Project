@@ -149,7 +149,7 @@ def scrape_public_key(key_string):
             break
 
     if len(public_key) != 2:
-        raise Exceiption
+        raise Exception
     
     return public_key
 
