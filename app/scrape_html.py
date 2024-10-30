@@ -47,12 +47,12 @@ def scrape_data(html):
                 string=re.compile("^[NnEe] *=? *[0-9]* *[,.]? *[NnEe]")
             )
         ).strip()
-
-        public_key = scrape_public_key(key_string)
-
-        if len(public_key) != 2:
+        
+        try:
+            public_key = scrape_public_key(key_string)
+        except Exception:
             post_number = post.find(class_="post_number_copy_link")
-            print(f"Error decoding post {post_number.get_text()}")
+            print(f"FormattingError: Post {post_number.get_text()} no key found.")
             continue
 
         # This uses regular expressions to narrow down any content in the
@@ -71,10 +71,15 @@ def scrape_data(html):
         ct_message = scrape_ct_message(message_string)
 
         # For time purposes, only decode messages with n less than 20 digits
-        # if public_key[0] <= 10000000000000000000:
-        private_key = rsa.break_key(public_key)
-        pt_message = rsa.Decode(private_key, ct_message)
-        response.string = pt_message
+        if public_key[0] <= 10000000000000000000:
+            try:
+                private_key = rsa.break_key(public_key)
+            except Exception:
+                post_number = post.find(class_="post_number_copy_link")
+                print(f"KeyError: Post {post_number.get_text()} no factors of n found.")
+                continue
+            pt_message = rsa.Decode(private_key, ct_message)
+            response.string = pt_message
 
         # These are all the replies to the main threads
         replies = post.select(
@@ -143,6 +148,9 @@ def scrape_public_key(key_string):
         if len(public_key) > 1:
             break
 
+    if len(public_key) != 2:
+        raise Exceiption
+    
     return public_key
 
 
