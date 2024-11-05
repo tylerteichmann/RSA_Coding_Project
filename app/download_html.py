@@ -65,7 +65,8 @@ def get_cookies(login_info):
         print("Successful Login")
     else:
         session.close()
-        raise Exception("Error logging in response code: " + response.status_code)
+        raise Exception("Error logging in. Response code: "
+                    + response.status_code)
 
     cookies = response.cookies.get_dict()
 
