@@ -41,6 +41,8 @@ def download_data(post, cookies):
     return html
 
 
+# This function creates a login session using the requests module
+# Then extracts the cookie information for browser automation
 def get_cookies(login_info):
     token_page = "https://piazza.com/main/csrf_token"
     login_page = "https://piazza.com/class"
@@ -76,7 +78,7 @@ def get_cookies(login_info):
     return cookies
 
 
-
+# This function gets login information from the user
 def get_login():
     email = input("Email: ").strip()
     password = input("Password: ").strip()
