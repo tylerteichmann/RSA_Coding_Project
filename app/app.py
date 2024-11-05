@@ -9,13 +9,23 @@
 ###############################################################################
 
 
-from download_html import download_data
+from download_html import download_data, get_login, get_cookies
 from scrape_html import scrape_data
 
 
 def main():
+    post = "218"
+
+    # get login information from user
+    login_info = get_login()
+
+    try:
+        cookies = get_cookies(login_info)
+    except Exception:
+        return 201
+
     # Download data from the piazza web page
-    html = download_data("https://piazza.com/class/lz9yd7ft6392yg/post/218")
+    html = download_data(post, cookies)
 
     # Scrape the Data and reload the page
     scrape_data(html)
